@@ -9,10 +9,19 @@ const App: React.FC = () => {
   const [time, setTime] = useState<number>(0);
   const [status, setStatus] = useState<StopwatchStatus>('idle');
   const [laps, setLaps] = useState<Lap[]>([]);
+  const [localTime, setLocalTime] = useState<string>(new Date().toLocaleTimeString());
   
   const timerRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const lastLapTimeRef = useRef<number>(0);
+
+  // Update local clock every second
+  useEffect(() => {
+    const clockInterval = setInterval(() => {
+      setLocalTime(new Date().toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(clockInterval);
+  }, []);
 
   const startTimer = useCallback(() => {
     setStatus('running');
@@ -61,45 +70,45 @@ const App: React.FC = () => {
 
   const { hours, minutes, seconds, milliseconds } = formatTime(time);
 
-  // Find fastest and slowest laps for highlighting
   const fastestLap = laps.length > 1 ? [...laps].sort((a, b) => a.time - b.time)[0] : null;
   const slowestLap = laps.length > 1 ? [...laps].sort((a, b) => b.time - a.time)[0] : null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[#0a0a0a]">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-orange-500">
       <div className="w-full max-w-md flex flex-col">
         
-        {/* Header */}
+        {/* Header - Now displaying local time */}
         <div className="text-center mb-12">
-          <h1 className="text-sm font-semibold tracking-[0.2em] text-neutral-500 uppercase mb-2">ZenTime</h1>
-          <div className="h-1 w-12 bg-white/10 mx-auto rounded-full"></div>
+          <h1 className="text-sm font-bold tracking-[0.2em] text-black/60 uppercase mb-2 mono">
+            {localTime}
+          </h1>
+          <div className="h-1 w-12 bg-black/10 mx-auto rounded-full"></div>
         </div>
 
         {/* Stopwatch Display */}
         <div className="relative mb-16 flex flex-col items-center justify-center">
-          <div className="text-8xl font-light mono tracking-tighter text-white flex items-baseline gap-1">
+          <div className="text-8xl font-light mono tracking-tighter text-black flex items-baseline gap-1">
             {hours !== '00' && (
               <>
                 <span>{hours}</span>
-                <span className="text-4xl text-neutral-600">:</span>
+                <span className="text-4xl text-black/40">:</span>
               </>
             )}
             <span>{minutes}</span>
-            <span className="text-4xl text-neutral-600">:</span>
+            <span className="text-4xl text-black/40">:</span>
             <span>{seconds}</span>
           </div>
-          <div className="mt-4 text-3xl mono font-medium text-neutral-500">
+          <div className="mt-4 text-3xl mono font-bold text-black/70">
             {milliseconds}
           </div>
           
-          {/* Subtle progress ring-like background */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/5 to-transparent rounded-full blur-3xl opacity-20 scale-150"></div>
+          <div className="absolute inset-0 -z-10 bg-white/30 rounded-full blur-3xl opacity-30 scale-150"></div>
         </div>
 
         {/* Controls */}
         <div className="grid grid-cols-2 gap-4 mb-12">
           {status === 'idle' ? (
-            <Button onClick={startTimer} variant="primary" className="col-span-2 py-4 text-lg">
+            <Button onClick={startTimer} variant="success" className="col-span-2 py-4 text-lg shadow-lg">
               <PlayIcon /> Start
             </Button>
           ) : status === 'running' ? (
@@ -126,10 +135,10 @@ const App: React.FC = () => {
         {/* Laps List */}
         <div className="flex-1 overflow-hidden">
           {laps.length > 0 && (
-            <div className="bg-neutral-900/40 border border-neutral-800/50 rounded-2xl p-6 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex justify-between items-center mb-4 pb-4 border-b border-neutral-800">
-                <h2 className="text-neutral-400 text-xs font-bold uppercase tracking-widest">Laps</h2>
-                <span className="text-neutral-600 text-xs mono">{laps.length} recorded</span>
+            <div className="bg-white/20 border border-white/30 rounded-2xl p-6 backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex justify-between items-center mb-4 pb-4 border-b border-black/10">
+                <h2 className="text-black/60 text-xs font-bold uppercase tracking-widest">Laps</h2>
+                <span className="text-black/50 text-xs mono">{laps.length} recorded</span>
               </div>
               <div className="max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                 {laps.map((lap) => (
@@ -146,7 +155,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <footer className="mt-auto py-8 text-neutral-600 text-[10px] uppercase tracking-widest text-center">
+      <footer className="mt-auto py-8 text-black/40 text-[10px] uppercase tracking-widest text-center font-bold">
         Precision Timing &bull; Minimal Design
       </footer>
 
@@ -158,18 +167,17 @@ const App: React.FC = () => {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #333;
+          background: rgba(0, 0, 0, 0.1);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #444;
+          background: rgba(0, 0, 0, 0.2);
         }
       `}</style>
     </div>
   );
 };
 
-// Simple SVG Icons
 const PlayIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M5 3l14 9-14 9V3z"/></svg>
 );
