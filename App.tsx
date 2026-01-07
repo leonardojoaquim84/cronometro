@@ -74,10 +74,10 @@ const App: React.FC = () => {
   const slowestLap = laps.length > 1 ? [...laps].sort((a, b) => b.time - a.time)[0] : null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-orange-500">
+    <div className="flex-1 flex flex-col items-center justify-center p-6 bg-orange-500">
       <div className="w-full max-w-md flex flex-col">
         
-        {/* Header - Now displaying local time */}
+        {/* Header - Local Time */}
         <div className="text-center mb-12">
           <h1 className="text-sm font-bold tracking-[0.2em] text-black/60 uppercase mb-2 mono">
             {localTime}
@@ -133,9 +133,9 @@ const App: React.FC = () => {
         </div>
 
         {/* Laps List */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden min-h-[100px]">
           {laps.length > 0 && (
-            <div className="bg-white/20 border border-white/30 rounded-2xl p-6 backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white/20 border border-white/30 rounded-2xl p-6 backdrop-blur-md">
               <div className="flex justify-between items-center mb-4 pb-4 border-b border-black/10">
                 <h2 className="text-black/60 text-xs font-bold uppercase tracking-widest">Laps</h2>
                 <span className="text-black/50 text-xs mono">{laps.length} recorded</span>
@@ -155,7 +155,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <footer className="mt-auto py-8 text-black/40 text-[10px] uppercase tracking-widest text-center font-bold">
+      <footer className="mt-8 py-4 text-black/40 text-[10px] uppercase tracking-widest text-center font-bold">
         Precision Timing &bull; Minimal Design
       </footer>
 
