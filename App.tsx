@@ -74,8 +74,8 @@ const App: React.FC = () => {
   const slowestLap = laps.length > 1 ? [...laps].sort((a, b) => b.time - a.time)[0] : null;
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 bg-orange-500">
-      <div className="w-full max-w-md flex flex-col">
+    <div className="flex-1 flex flex-col items-center justify-center p-6 bg-orange-500 min-h-screen">
+      <div className="w-full max-w-md flex flex-col my-auto">
         
         {/* Header - Local Time */}
         <div className="text-center mb-12">
@@ -154,10 +154,6 @@ const App: React.FC = () => {
           )}
         </div>
       </div>
-
-      <footer className="mt-8 py-4 text-black/40 text-[10px] uppercase tracking-widest text-center font-bold">
-        Precision Timing &bull; Minimal Design
-      </footer>
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
